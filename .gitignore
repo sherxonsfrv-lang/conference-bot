@@ -4,8 +4,6 @@ node_modules
 .env.staging
 .env.production
 npm-debug.log*
-package-lock.json
-yarn.lock
 .DS_Store
 dist
 .zip
