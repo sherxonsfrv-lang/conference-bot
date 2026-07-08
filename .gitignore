@@ -9,5 +9,3 @@ yarn.lock
 .DS_Store
 dist
 .zip
-webapp/
-webapp
