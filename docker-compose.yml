@@ -1,0 +1,39 @@
+version: "3.9"
+
+services:
+  mysql:
+    image: mysql:8.0
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASSWORD:-root_password}
+      MYSQL_DATABASE: ${DB_NAME:-social_connection_bot}
+      MYSQL_USER: ${DB_USER:-db_user}
+      MYSQL_PASSWORD: ${DB_PASSWORD:-db_password}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+
+  app:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - mysql
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      TELEGRAM_BOT_TOKEN: ${TELEGRAM_BOT_TOKEN}
+      DB_HOST: mysql
+      DB_NAME: ${DB_NAME:-social_connection_bot}
+      DB_USER: ${DB_USER:-db_user}
+      DB_PASSWORD: ${DB_PASSWORD:-db_password}
+      DB_DIALECT: mysql
+      SECOND_SCREEN_API_KEY: ${SECOND_SCREEN_API_KEY}
+      MAIN_ADMIN_TELEGRAM_IDS: ${MAIN_ADMIN_TELEGRAM_IDS}
+    ports:
+      - "3000:3000"
+
+volumes:
+  mysql_data:
+
+
