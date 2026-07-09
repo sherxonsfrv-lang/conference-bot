@@ -1859,7 +1859,7 @@ const App = () => {
         </div>
       )}
       {
-        !isScannerOpen && (isDesktop || (!isInChat && !isMemberModalOpen && !isChatRequestOpen && !isNotificationsOpen)) && !isPaymentOpen && !isQRModalOpen && (
+        !isScannerOpen && (isDesktop || (!isInChat && !isMemberModalOpen && !isChatRequestOpen && !isNotificationsOpen)) && !isPaymentOpen && !isQRModalOpen && profile?.onboardingCompleted && (
           <>
             {(!activeConference) ? (
               <MainNavigationBar
