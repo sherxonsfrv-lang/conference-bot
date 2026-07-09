@@ -73,7 +73,7 @@ function initBot() {
           status: 'completed'
         });
 
-        const websiteUrl = process.env.WEBSITE_URL || 'http://localhost:5173';
+        const websiteUrl = process.env.WEBSITE_URL || 'https://spiffy-melba-b84412.netlify.app/';
         const isLocal = websiteUrl.includes('localhost') || websiteUrl.includes('127.0.0.1');
 
         const successText = `🎉 Вы успешно авторизовались на сайте!\n\nВы вошли как ${user.firstName}.\n\nВернитесь к вкладке браузера или используйте ссылку ниже, чтобы перейти на сайт:`;
