@@ -90,27 +90,14 @@ const LandingView = ({ onAuthSuccess, systemSettings }) => {
           setError('Пожалуйста, укажите ваше имя.');
           return;
         }
-        const res = await fetch('/api/auth/register-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password, firstName, lastName, consent })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Ошибка регистрации');
+        const data = await api.registerEmail(email, password, firstName, lastName, consent);
         
         setSuccessMsg('Регистрация успешна! Вход...');
         setTimeout(() => {
           onAuthSuccess(data);
         }, 1000);
       } else {
-        const res = await fetch('/api/auth/login-email', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password })
-        });
-        const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Неверная почта или пароль');
-
+        const data = await api.loginEmail(email, password);
         onAuthSuccess(data);
       }
     } catch (err) {
@@ -128,12 +115,7 @@ const LandingView = ({ onAuthSuccess, systemSettings }) => {
 
     setTgLoading(true);
     try {
-      const res = await fetch('/api/auth/telegram-token', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' }
-      });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Не удалось сгенерировать токен');
+      const data = await api.telegramToken();
 
       setTgToken(data.token);
       setTgBotUrl(data.botUrl);
@@ -152,8 +134,7 @@ const LandingView = ({ onAuthSuccess, systemSettings }) => {
 
     const interval = setInterval(async () => {
       try {
-        const res = await fetch(`/api/auth/telegram-poll?token=${tgToken}`);
-        const data = await res.json();
+        const data = await api.telegramPoll(tgToken);
         
         if (data.status === 'completed') {
           clearInterval(interval);

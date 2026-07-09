@@ -272,7 +272,12 @@ const App = () => {
         if (envApiUrl) {
           return envApiUrl.replace(/\/api\/?$/, '');
         }
-        return window.location.origin;
+        
+        const { hostname } = window.location;
+        if (hostname === 'localhost' || hostname === '127.0.0.1') {
+          return window.location.origin;
+        }
+        return 'https://conference-bot-production.up.railway.app';
       };
       const socketUrl = getSocketUrl();
       console.log('[SOCKET] Connecting to:', socketUrl);

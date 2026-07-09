@@ -1,14 +1,14 @@
 const getBaseUrl = () => {
   if (import.meta.env.VITE_API_URL) return import.meta.env.VITE_API_URL;
   
-  const { protocol, hostname } = window.location;
-  // If we're on localhost:5173 (Vite), we proxy to localhost:4000/api
+  const { hostname } = window.location;
+  // If we're on localhost:5173 (Vite), we proxy to localhost:3000/api
   if (hostname === 'localhost' || hostname === '127.0.0.1') {
     return '/api'; // Use proxy
   }
   
-  // Production: assume /api is on the same host or a subdomain
-  return `${protocol}//${hostname}${window.location.port ? `:${window.location.port}` : ''}/api`;
+  // Production fallback: Point to the backend server deployed on Railway
+  return 'https://conference-bot-production.up.railway.app/api';
 };
 
 const BASE_URL = getBaseUrl();
@@ -72,6 +72,22 @@ class ApiClient {
 
   getPublicSettings() {
     return this._request('GET', '/auth/settings');
+  }
+
+  registerEmail(email, password, firstName, lastName, consent) {
+    return this._request('POST', '/auth/register-email', { email, password, firstName, lastName, consent });
+  }
+
+  loginEmail(email, password) {
+    return this._request('POST', '/auth/login-email', { email, password });
+  }
+
+  telegramToken() {
+    return this._request('POST', '/auth/telegram-token');
+  }
+
+  telegramPoll(token) {
+    return this._request('GET', `/auth/telegram-poll?token=${token}`);
   }
 
   // ── Conferences ────────────────────────────────────────────────────────────
