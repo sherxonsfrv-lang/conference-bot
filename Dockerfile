@@ -1,5 +1,5 @@
 # Stage 1: Build Frontend
-FROM node:18-alpine AS build-stage
+FROM node:20-alpine AS build-stage
 WORKDIR /app/webapp
 COPY webapp/package*.json ./
 RUN npm ci
@@ -7,7 +7,7 @@ COPY webapp/ ./
 RUN npm run build
 
 # Stage 2: Production
-FROM node:18-alpine
+FROM node:20-alpine
 ENV NODE_ENV=production
 
 WORKDIR /app
