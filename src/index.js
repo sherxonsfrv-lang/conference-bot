@@ -110,8 +110,19 @@ async function bootstrap() {
 
   startMeetingNotificationScheduler();
 
+  const allowedOrigins = [
+    'https://spiffy-melba-b84412.netlify.app',
+    // 'http://localhost:5173',
+    // 'http://127.0.0.1:5173',
+    // 'http://localhost:3000',
+    // 'http://127.0.0.1:3000'
+  ];
+
   const app = express();
-  app.use(cors());
+  app.use(cors({
+    origin: allowedOrigins,
+    credentials: true
+  }));
   app.use(express.json());
   app.use(morgan('dev'));
 
@@ -150,7 +161,11 @@ async function bootstrap() {
 
   const server = http.createServer(app);
   const io = new Server(server, {
-    cors: { origin: '*', methods: ['GET', 'POST'] },
+    cors: { 
+      origin: allowedOrigins, 
+      methods: ['GET', 'POST'],
+      credentials: true
+    },
   });
 
   // TWA Client socket handler
